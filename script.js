@@ -8,10 +8,9 @@ $(document).ready(function() {
 
     let citylist = JSON.parse(localStorage.getItem('citylist')) || [];
     let today = $("#today")
+    let forecast = $('#forecast')
 ///creating an ajax call for the current weather
     function displayWeatherInfo(x) {
-
-    today.html("");
 //if(x){return x}else{return $('#search-value').val().trim()}
         let cityname =  x ? x : $('#search-value').val().trim();
         let queryURL =  `https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=ff08eb5d4213f782c579bf4227c2f56d`;
@@ -20,25 +19,25 @@ $(document).ready(function() {
           url: queryURL,
           method: "GET"
         }).then(function(res) {
-            if(!citylist.includes(cityname)){
-                
-            }
             citylist.push(cityname);
             localStorage.setItem('citylist', JSON.stringify(citylist));
             console.log(citylist)
             console.log(res.name);
+            let windspeed = res.wind.speed + " mph wind";
             let city = res.name;
-            let faren = convertkelvin(res.main.temp)
+            let humidity = res.main.humidity + "% humidity"
+            console.log(windspeed);
+            console.log(humidity);
+
+            let faren = convertkelvin(res.main.temp) + " degrees farenheit"
             console.log(faren);
-            let currenttemp = $('<h1>').text(faren + "degrees F");
+            let currenttemp = $('<h1>').text(faren);
             today.append(currenttemp);
             $.ajax({
                 url: `https://api.openweathermap.org/data/2.5/forecast?q=${cityname}&appid=ff08eb5d4213f782c579bf4227c2f56d`,
                 method: "GET"
             }).then(function(response) {
-                console.log(response.list[0].dt_txt);
-                console.log(convertkelvin(response.list[0].main.temp)
-
+                console.log(response);
             })
 
 
@@ -61,7 +60,7 @@ $(document).ready(function() {
 
 
 
-//    $(document).on("click", ".btn-primary", displayWeatherInfo);
+   $(document).on("click", ".btn-primary", displayWeatherInfo);
   
    function renderCityButtons() {
     $(".list-group").empty();
@@ -84,8 +83,8 @@ $(document).ready(function() {
       $(".list-group").prepend(a);
     }
   }
-  renderCityButtons();
-
+renderCityButtons()
+  
 
 
 
@@ -100,20 +99,20 @@ $(document).ready(function() {
 //   // This function handles events where a city button is clicked
   $(document).on("click", 'button', function(event) {
     event.preventDefault();
-    if($(this).attr('data-name')){
-        $(".list-group").empty();
-        displayWeatherInfo($(this).attr('data-name'));
-    }
-    else {displayWeatherInfo(); 
+    if($(this).attr('data-name')) {
 
-    }
+     
     // This line grabs the input from the textbox
-    
+    displayWeatherInfo($(this).attr('data-name'));
+    }
   });
+
+
+});
 
   // Adding a click event listener to all elements with a class of "movie-btn"
  
-});
+
 //   //**need to  */
 
 //   // Calling the renderButtons function to display the initial buttons
