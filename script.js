@@ -1,5 +1,6 @@
 $(document).ready(function() {
 
+    //temperature convertion function
     function convertkelvin(temp) {
         let farenheit = (temp - 273.15) * 1.80 + 32;
         return farenheit.toFixed(2);
@@ -37,7 +38,7 @@ $(document).ready(function() {
                 url: `https://api.openweathermap.org/data/2.5/forecast?q=${cityname}&appid=ff08eb5d4213f782c579bf4227c2f56d`,
                 method: "GET"
             }).then(function(response) {
-                console.log(response);
+                console.log(response.list[0]);
             })
 
 
@@ -60,7 +61,7 @@ $(document).ready(function() {
 
 
 
-   $(document).on("click", ".btn-primary", displayWeatherInfo);
+//    $(document).on("click", "button", displayWeatherInfo);
   
    function renderCityButtons() {
     $(".list-group").empty();
@@ -101,10 +102,9 @@ renderCityButtons()
     event.preventDefault();
     if($(this).attr('data-name')) {
 
-     
-    // This line grabs the input from the textbox
-    displayWeatherInfo($(this).attr('data-name'));
     }
+    displayWeatherInfo($(this).attr('data-name'));
+    
   });
 
 
