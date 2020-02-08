@@ -13,16 +13,18 @@ $(document).ready(function() {
 ///creating an ajax call for the current weather
     function displayWeatherInfo(x) {
 //if(x){return x}else{return $('#search-value').val().trim()}
-        let cityname =  x ? x : $('#search-value').val().trim();
+        let cityname =  x || $('#search-value').val().trim();
         let queryURL =  `https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=ff08eb5d4213f782c579bf4227c2f56d`;
 
         $.ajax({
           url: queryURL,
           method: "GET"
         }).then(function(res) {
+          if (!citylist.includes(cityname)) {
             citylist.push(cityname);
             localStorage.setItem('citylist', JSON.stringify(citylist));
-            console.log(citylist)
+          } 
+            console.log(citylist);
             console.log(res.name);
             let windspeed = res.wind.speed + " mph wind";
             let city = res.name;
@@ -33,7 +35,7 @@ $(document).ready(function() {
             let faren = convertkelvin(res.main.temp) + " degrees farenheit"
             console.log(faren);
             let currenttemp = $('<h1>').text(faren);
-            today.append(currenttemp);
+            today.html(currenttemp);
             $.ajax({
                 url: `https://api.openweathermap.org/data/2.5/forecast?q=${cityname}&appid=ff08eb5d4213f782c579bf4227c2f56d`,
                 method: "GET"
@@ -44,28 +46,17 @@ $(document).ready(function() {
 
         renderCityButtons();
 
-        }
-    )}
+    }
+    )
+  }
 
 
 // /****-----AJAX for forecast------>*****/
 
-
-
-
-
-
-
-
-
-
-
-
 //    $(document).on("click", "button", displayWeatherInfo);
   
-   function renderCityButtons() {
+function renderCityButtons() {
     $(".list-group").empty();
-
     // Deleting the citylist prior to adding new citylist
     // (this is necessary otherwise you will have repeat buttons)
 
@@ -83,7 +74,7 @@ $(document).ready(function() {
       // Adding the button to the buttons-view div
       $(".list-group").prepend(a);
     }
-  }
+}
 renderCityButtons()
   
 
@@ -109,8 +100,6 @@ renderCityButtons()
 
 
 });
-
-  // Adding a click event listener to all elements with a class of "movie-btn"
  
 
 //   //**need to  */
