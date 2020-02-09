@@ -1,5 +1,6 @@
 $(document).ready(function() {
-
+  let date = new Date();
+  let hour = date.getHours();
     //temperature convertion function
     function convertkelvin(temp) {
         let farenheit = (temp - 273.15) * 1.80 + 32;
@@ -40,7 +41,14 @@ $(document).ready(function() {
                 url: `https://api.openweathermap.org/data/2.5/forecast?q=${cityname}&appid=ff08eb5d4213f782c579bf4227c2f56d`,
                 method: "GET"
             }).then(function(response) {
-                console.log(response.list[0]);
+              let offset = Math.floor((24-hour)/3)
+                console.log(response.list);
+                $("#forecast").empty();
+                for(let i=offset;i<response.list.length;i+=8){
+                  console.log(response.list[i])
+                  let icon = response.list[i].weather[0].icon
+                  $('#forecast').append(`<div class='col-2' style='margin:auto'><h6>Date: ${response.list[i].dt_txt}</h6><img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="forecast" width="50" height="50"></div>`)
+                }
             })
 
 
@@ -52,7 +60,7 @@ $(document).ready(function() {
 
 
 // /****-----AJAX for forecast------>*****/
-
+https://api.openweathermap.org/data/2.5/forecast?q=dallas&appid=ff08eb5d4213f782c579bf4227c2f56d
 //    $(document).on("click", "button", displayWeatherInfo);
   
 function renderCityButtons() {
